@@ -25,13 +25,13 @@ class ForecastRepositoryImpl @Inject constructor(
     override suspend fun getForecastList(
         lat: Double,
         lon: Double,
-        apiKey: String,
     ): List<WeatherDataEntity> {
         return withContext(dispatcher) {
             try {
-                val response = apiService.getForecast(lat, lon, apiKey)
+                val response = apiService.getForecast(lat, lon)
                 mapToDomainModel(response)
             } catch (e: Exception) {
+                val exception = e.message
                 emptyList()
             }
         }
@@ -53,12 +53,12 @@ class ForecastRepositoryImpl @Inject constructor(
     }
 
     private fun mapToDomainModel(forecastResponse: WeatherResponse): List<WeatherDataEntity> {
-        return forecastResponse.list.map { forecastItem ->
+        return forecastResponse.list.orEmpty().map { forecastItem ->
             WeatherDataEntity(
-                temperature = forecastItem.main.temp,
-                humidity = forecastItem.main.humidity,
-                description = forecastItem.weather.firstOrNull()?.description.orEmpty(),
-                dateTime = forecastItem.dt_txt
+                temperature = forecastItem?.main?.temp ?: 0.0,
+                humidity = forecastItem?.main?.humidity ?: 0,
+                description = forecastItem?.weather?.firstOrNull()?.description.orEmpty(),
+                dateTime = forecastItem?.dtTxt.orEmpty(),
             )
         }
     }

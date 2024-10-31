@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.baims.dailyforecast.data.di.IODispatcher
 import com.baims.dailyforecast.domain.usecases.GetCitiesUseCase
 import com.baims.dailyforecast.domain.usecases.GetForecastListUseCase
+import com.baims.dailyforecast.presentation.forecast.ForecastScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -25,6 +26,10 @@ class ForecastViewModel @Inject constructor(
         MutableStateFlow(CitiesScreenState(emptyList(), true)) // Use MutableStateFlow
     val state: StateFlow<CitiesScreenState> = _state.asStateFlow()
 
+    private val _weatherDataListState =
+        MutableStateFlow(ForecastScreenState(emptyList(), true)) // Use MutableStateFlow
+    val weatherDataListState: StateFlow<ForecastScreenState> = _weatherDataListState.asStateFlow()
+
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
         _state.value = _state.value.copy(error = throwable.message, isLoading = false)
@@ -42,6 +47,22 @@ class ForecastViewModel @Inject constructor(
                 _state.value = _state.value.copy(citiesList = cities, isLoading = false)
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = e.message, isLoading = false)
+            }
+        }
+    }
+
+    fun getWeatherDataList(lat: Double, lon: Double) {
+        viewModelScope.launch(coroutineExceptionHandler + dispatcher) {
+            _weatherDataListState.value = _weatherDataListState.value.copy(isLoading = true)
+            try {
+                val weatherDataList = getForecastListUseCase(lat, lon)
+                _weatherDataListState.value = _weatherDataListState.value.copy(
+                    weatherDataList = weatherDataList,
+                    isLoading = false
+                )
+            } catch (e: Exception) {
+                _weatherDataListState.value =
+                    _weatherDataListState.value.copy(error = e.message, isLoading = false)
             }
         }
     }

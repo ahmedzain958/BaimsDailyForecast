@@ -26,8 +26,8 @@ import com.baims.dailyforecast.domain.model.City
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CityDropdown(viewModel: ForecastViewModel = hiltViewModel(),
-                 onNavigateToDailyBroadcast: (City) -> Unit
+fun CitiesDropdownScreen(viewModel: ForecastViewModel = hiltViewModel(),
+                         onNavigateToDailyBroadcast: (City) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     var expanded by remember { mutableStateOf(false) }
@@ -71,7 +71,6 @@ fun CityDropdown(viewModel: ForecastViewModel = hiltViewModel(),
             onClick = {
                 selectedCity?.let { city ->
                     onNavigateToDailyBroadcast(city)
-//                    fetchWeatherData(city.lat, city.lon, viewModel)
                 }
             },
             modifier = Modifier

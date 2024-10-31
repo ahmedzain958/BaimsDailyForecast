@@ -9,6 +9,6 @@ class GetForecastListUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(lat: Double, lon: Double):
             List<WeatherDataEntity> {
-        return repository.getForecastList(lat, lon, "816ad9e0c3cb984afbe68550fe4f0a06")
+        return repository.getForecastList(lat, lon)
     }
 }

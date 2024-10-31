@@ -37,7 +37,7 @@ object ForecastDataModule {
     fun provideCitiesRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.openweathermap.org/")
+            .baseUrl("https://api.openweathermap.org/data/2.5/forecast?")
             .build()
     }
 

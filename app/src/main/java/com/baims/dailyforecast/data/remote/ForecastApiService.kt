@@ -1,6 +1,5 @@
 package com.baims.dailyforecast.data.remote
 
-import com.baims.dailyforecast.data.remote.model.RemoteCity
 import com.baims.dailyforecast.data.remote.model.RemoteGym
 import com.baims.dailyforecast.data.remote.model.WeatherResponse
 import retrofit2.http.GET
@@ -15,10 +14,9 @@ interface ForecastApiService {
     @GET("gyms.json?orderBy=\"id\"")
     suspend fun getGymById(@Query("equalTo") id: Int): Map<String, RemoteGym>
 
-    @GET("data/2.5/forecast")
+    @GET("appid=816ad9e0c3cb984afbe68550fe4f0a06")
     suspend fun getForecast(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
-        @Query("appid") apiKey: String
     ): WeatherResponse
 }

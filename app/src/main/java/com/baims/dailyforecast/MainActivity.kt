@@ -9,8 +9,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.baims.dailyforecast.presentation.citieslist.CitiesDropdownScreen
 import com.baims.dailyforecast.presentation.citieslist.ForecastViewModel
-import com.baims.dailyforecast.presentation.citieslist.CityDropdown
 import com.baims.dailyforecast.presentation.gymslist.GymsScreen
 import com.baims.dailyforecast.presentation.gymslist.GymsViewModel
 import com.baims.dailyforecast.ui.theme.BaimsDailyForecastTheme
@@ -36,28 +36,32 @@ private fun ForecastAroundApp() {
             val gymsViewModel: GymsViewModel = hiltViewModel()
             val forecastViewModel: ForecastViewModel = hiltViewModel()
             Column {
-                CityDropdown(forecastViewModel, {})
-                GymsScreen(gymsViewModel.state.value, { id ->
-                    navController.navigate("gyms/$id")
+                CitiesDropdownScreen(forecastViewModel, { city ->
+                    val lat = city.lat
+                    val lon = city.lon
+                    forecastViewModel.getWeatherDataList(lat ?: 0.0, lon ?: 0.0)
+                })
+                /*GymsScreen(gymsViewModel.state.value, { id ->
+//                    navController.navigate("gyms/$id")
                 }, onFavouriteIconClick = { id: Int, oldValue: Boolean ->
                     gymsViewModel.toggleFavState(id, oldValue)
-                })
+                })*/
             }
 
         }
 
-       /* composable(
-            route = "gyms/{gym_id}", arguments = listOf(
-                navArgument("gym_id") {
-                    type = NavType.IntType
-                }), deepLinks = listOf(
-                navDeepLink {
-                    uriPattern = "https://www.gymsaround.com/details/{gym_id}"
+        /* composable(
+             route = "gyms/{gym_id}", arguments = listOf(
+                 navArgument("gym_id") {
+                     type = NavType.IntType
+                 }), deepLinks = listOf(
+                 navDeepLink {
+                     uriPattern = "https://www.gymsaround.com/details/{gym_id}"
 
-                }
-            )
-        ) { it: androidx.navigation.NavBackStackEntry ->
-            GymDetailsScreen()
-        }*/
+                 }
+             )
+         ) { it: androidx.navigation.NavBackStackEntry ->
+             GymDetailsScreen()
+         }*/
     }
 }
