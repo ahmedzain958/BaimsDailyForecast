@@ -27,7 +27,7 @@ class ForecastViewModel @Inject constructor(
     val state: StateFlow<CitiesScreenState> = _state.asStateFlow()
 
     private val _weatherDataListState =
-        MutableStateFlow(ForecastScreenState(emptyList(), true)) // Use MutableStateFlow
+        MutableStateFlow(ForecastScreenState(emptyList(), false)) // Use MutableStateFlow
     val weatherDataListState: StateFlow<ForecastScreenState> = _weatherDataListState.asStateFlow()
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->

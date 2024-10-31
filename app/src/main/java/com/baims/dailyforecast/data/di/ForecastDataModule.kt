@@ -37,7 +37,7 @@ object ForecastDataModule {
     fun provideCitiesRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.openweathermap.org/data/2.5/forecast?")
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
             .build()
     }
 
@@ -56,7 +56,7 @@ object ForecastDataModule {
     fun provideDao(gymsDatabase: GymsDatabase) = gymsDatabase.dao
 
     @Provides
-    fun provideApiService(retrofit: Retrofit): ForecastApiService =
+    fun provideApiService(@Named("CitiesRetrofit") retrofit: Retrofit): ForecastApiService =
         retrofit.create(ForecastApiService::class.java)
 
     @Provides

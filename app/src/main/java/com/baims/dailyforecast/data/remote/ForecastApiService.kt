@@ -14,7 +14,7 @@ interface ForecastApiService {
     @GET("gyms.json?orderBy=\"id\"")
     suspend fun getGymById(@Query("equalTo") id: Int): Map<String, RemoteGym>
 
-    @GET("appid=816ad9e0c3cb984afbe68550fe4f0a06")
+    @GET("forecast?appid=816ad9e0c3cb984afbe68550fe4f0a06")
     suspend fun getForecast(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,

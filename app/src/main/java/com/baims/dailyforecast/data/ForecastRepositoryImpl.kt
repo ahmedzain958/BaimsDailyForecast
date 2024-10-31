@@ -14,12 +14,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class ForecastRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val apiService: ForecastApiService,
+    @Named("CitiesRetrofit") private val apiService: ForecastApiService,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
 ) : ForecastRepository {
     override suspend fun getForecastList(

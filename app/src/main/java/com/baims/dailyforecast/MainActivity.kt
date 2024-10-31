@@ -3,16 +3,16 @@ package com.baims.dailyforecast
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.baims.dailyforecast.presentation.citieslist.CitiesDropdownScreen
 import com.baims.dailyforecast.presentation.citieslist.ForecastViewModel
-import com.baims.dailyforecast.presentation.gymslist.GymsScreen
-import com.baims.dailyforecast.presentation.gymslist.GymsViewModel
+import com.baims.dailyforecast.presentation.forecast.ForecastScreen
 import com.baims.dailyforecast.ui.theme.BaimsDailyForecastTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,37 +31,25 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun ForecastAroundApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "gyms") {
-        composable(route = "gyms") {
-            val gymsViewModel: GymsViewModel = hiltViewModel()
-            val forecastViewModel: ForecastViewModel = hiltViewModel()
-            Column {
-                CitiesDropdownScreen(forecastViewModel, { city ->
-                    val lat = city.lat
-                    val lon = city.lon
-                    forecastViewModel.getWeatherDataList(lat ?: 0.0, lon ?: 0.0)
-                })
-                /*GymsScreen(gymsViewModel.state.value, { id ->
-//                    navController.navigate("gyms/$id")
-                }, onFavouriteIconClick = { id: Int, oldValue: Boolean ->
-                    gymsViewModel.toggleFavState(id, oldValue)
-                })*/
+    NavHost(navController = navController, startDestination = "cities") {
+        composable(route = "cities") {
+            CitiesDropdownScreen() { city ->
+                navController.navigate("forecast?lat=${city.lat}&lon=${city.lon}")
             }
-
         }
-
-        /* composable(
-             route = "gyms/{gym_id}", arguments = listOf(
-                 navArgument("gym_id") {
-                     type = NavType.IntType
-                 }), deepLinks = listOf(
-                 navDeepLink {
-                     uriPattern = "https://www.gymsaround.com/details/{gym_id}"
-
-                 }
-             )
-         ) { it: androidx.navigation.NavBackStackEntry ->
-             GymDetailsScreen()
-         }*/
+        composable(
+            route = "forecast?lat={lat}&lon={lon}",
+            arguments = listOf(
+                navArgument("lat") { type = NavType.FloatType },
+                navArgument("lon") { type = NavType.FloatType }
+            )
+        ) { backStackEntry ->
+            val lat = backStackEntry.arguments?.getFloat("lat") ?: 0f
+            val lon = backStackEntry.arguments?.getFloat("lon") ?: 0f
+            val forecastViewModel: ForecastViewModel = hiltViewModel()
+            forecastViewModel.getWeatherDataList(lat.toDouble(), lon.toDouble())
+            val state = forecastViewModel.weatherDataListState.value
+            ForecastScreen(state = state)
+        }
     }
 }
