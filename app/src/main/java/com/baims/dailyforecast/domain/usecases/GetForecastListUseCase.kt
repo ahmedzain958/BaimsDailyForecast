@@ -7,8 +7,7 @@ import javax.inject.Inject
 class GetForecastListUseCase @Inject constructor(
     private val repository: ForecastRepository,
 ) {
-    suspend operator fun invoke(lat: Double, lon: Double):
-            List<WeatherDataEntity> {
+    suspend operator fun invoke(lat: Double, lon: Double): List<WeatherDataEntity> {
         return repository.getForecastList(lat, lon)
     }
 }

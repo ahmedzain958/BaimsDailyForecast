@@ -51,12 +51,12 @@ fun ForecastScreen(
         else -> {
             LazyColumn {
                 items(state.weatherDataList) { weatherDataEntity: WeatherDataEntity ->
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(text = weatherDataEntity.temperature.toString())
                 }
             }
         }
     }
-    Text(text = state.weatherDataList.toString())
 }
 
 @Composable
