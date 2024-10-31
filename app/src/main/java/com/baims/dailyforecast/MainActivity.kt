@@ -3,15 +3,8 @@ package com.baims.dailyforecast
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.baims.dailyforecast.presentation.citieslist.CitiesViewModel
+import com.baims.dailyforecast.presentation.citieslist.CityDropdown
 import com.baims.dailyforecast.presentation.details.GymDetailsScreen
 import com.baims.dailyforecast.presentation.gymslist.GymsScreen
 import com.baims.dailyforecast.presentation.gymslist.GymsViewModel
@@ -32,8 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BaimsDailyForecastTheme {
-                GymsAroundApp()
-
+                val vm: CitiesViewModel = hiltViewModel()
+                CityDropdown(vm)
             }
         }
     }

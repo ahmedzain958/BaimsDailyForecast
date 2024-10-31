@@ -14,11 +14,6 @@ interface GymsApiService {
     @GET("gyms.json?orderBy=\"id\"")
     suspend fun getGymById(@Query("equalTo") id: Int): Map<String, RemoteGym>
 
-
-    @GET("cities.json")
-    suspend fun getCities(): List<RemoteCity>
-
-
     @GET("cities.json")
     suspend fun getForecast(): List<RemoteCity>
 

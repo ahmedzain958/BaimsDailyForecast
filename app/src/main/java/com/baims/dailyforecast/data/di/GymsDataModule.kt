@@ -2,10 +2,12 @@ package com.baims.dailyforecast.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.baims.dailyforecast.data.ForecastRepositoryImpl
 import com.baims.dailyforecast.data.GymsRepositoryImpl
 import com.baims.dailyforecast.data.local.GymsDao
 import com.baims.dailyforecast.data.local.GymsDatabase
 import com.baims.dailyforecast.data.remote.GymsApiService
+import com.baims.dailyforecast.domain.ForecastRepository
 import com.baims.dailyforecast.domain.GymsRepository
 import dagger.Module
 import dagger.Provides
@@ -64,5 +66,12 @@ object GymsDataModule {
         @IODispatcher dispatcher: CoroutineDispatcher,
     ): GymsRepository =
         GymsRepositoryImpl(apiService, gymDao, dispatcher)
+
+  @Provides
+    fun provideForecastRepository(@ApplicationContext   context: Context,
+        apiService: GymsApiService,
+        @IODispatcher dispatcher: CoroutineDispatcher,
+    ): ForecastRepository =
+      ForecastRepositoryImpl(context, apiService, dispatcher)
 
 }
