@@ -1,7 +1,9 @@
 package com.baims.dailyforecast.data.di
 
 import android.content.Context
+import androidx.room.Room
 import com.baims.dailyforecast.data.ForecastRepositoryImpl
+import com.baims.dailyforecast.data.local.WeatherDatabase
 import com.baims.dailyforecast.data.remote.ForecastApiService
 import com.baims.dailyforecast.domain.ForecastRepository
 import dagger.Module
@@ -26,6 +28,22 @@ object ForecastDataModule {
             .baseUrl("https://api.openweathermap.org/data/2.5/")
             .build()
     }
+
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(@ApplicationContext context: Context): WeatherDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            WeatherDatabase::class.java,
+            "weather_database"
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    fun provideDao(weatherDatabase: WeatherDatabase) = weatherDatabase.dao
+
 
     @Provides
     fun provideApiService(retrofit: Retrofit): ForecastApiService =
