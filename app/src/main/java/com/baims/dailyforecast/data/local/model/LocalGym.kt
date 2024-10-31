@@ -1,4 +1,4 @@
-package com.baims.dailyforecast.data.local
+package com.baims.dailyforecast.data.local.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,4 +1,4 @@
-package com.baims.dailyforecast.domain
+package com.baims.dailyforecast.domain.model
 
 data class Gym(
     val id: Int,

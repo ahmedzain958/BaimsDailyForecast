@@ -2,15 +2,20 @@ package com.baims.dailyforecast.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.baims.dailyforecast.data.GymsRepositoryImpl
+import com.baims.dailyforecast.data.local.GymsDao
 import com.baims.dailyforecast.data.local.GymsDatabase
 import com.baims.dailyforecast.data.remote.GymsApiService
+import com.baims.dailyforecast.domain.GymsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -22,6 +27,16 @@ object GymsDataModule {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://projectname-5ee14.firebaseio.com/").build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("CitiesRetrofit")
+    fun provideCitiesRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://dev-orcas.s3.eu-west-1.amazonaws.com/uploads/")
+            .build()
     }
 
     @Provides
@@ -41,4 +56,13 @@ object GymsDataModule {
     @Provides
     fun provideApiService(retrofit: Retrofit): GymsApiService =
         retrofit.create(GymsApiService::class.java)
+
+    @Provides
+    fun provideGymsRepository(
+        apiService: GymsApiService,
+        gymDao: GymsDao,
+        @IODispatcher dispatcher: CoroutineDispatcher,
+    ): GymsRepository =
+        GymsRepositoryImpl(apiService, gymDao, dispatcher)
+
 }

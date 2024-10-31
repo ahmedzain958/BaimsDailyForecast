@@ -40,7 +40,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.baims.dailyforecast.domain.Gym
+import com.baims.dailyforecast.domain.model.Gym
 import com.baims.dailyforecast.presentation.SemanticDescription
 import com.baims.dailyforecast.ui.theme.Purple80
 

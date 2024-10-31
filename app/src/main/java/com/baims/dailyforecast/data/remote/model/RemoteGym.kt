@@ -1,4 +1,4 @@
-package com.baims.dailyforecast.data.remote
+package com.baims.dailyforecast.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 

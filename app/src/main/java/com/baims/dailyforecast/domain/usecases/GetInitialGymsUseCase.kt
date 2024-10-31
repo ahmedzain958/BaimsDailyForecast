@@ -1,7 +1,7 @@
 package com.baims.dailyforecast.domain.usecases
 
-import com.baims.dailyforecast.data.GymsRepository
-import com.baims.dailyforecast.domain.Gym
+import com.baims.dailyforecast.domain.model.Gym
+import com.baims.dailyforecast.domain.GymsRepository
 import javax.inject.Inject
 
 class GetInitialGymsUseCase @Inject constructor(

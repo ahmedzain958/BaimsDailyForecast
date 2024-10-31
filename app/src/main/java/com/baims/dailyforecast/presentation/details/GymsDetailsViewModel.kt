@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baims.dailyforecast.data.remote.GymsApiService
-import com.baims.dailyforecast.domain.Gym
+import com.baims.dailyforecast.domain.model.Gym
 import com.baims.dailyforecast.domain.usecases.GetGymsByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

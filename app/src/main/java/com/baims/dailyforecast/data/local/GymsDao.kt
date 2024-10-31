@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.baims.dailyforecast.data.local.model.LocalGym
+import com.baims.dailyforecast.data.local.model.LocalGymFavouriteState
 
 @Dao
 interface GymsDao {
