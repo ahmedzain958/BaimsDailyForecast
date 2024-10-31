@@ -3,8 +3,23 @@ package com.baims.dailyforecast
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,7 +32,6 @@ import com.baims.dailyforecast.presentation.citieslist.CityDropdown
 import com.baims.dailyforecast.presentation.details.GymDetailsScreen
 import com.baims.dailyforecast.presentation.gymslist.GymsScreen
 import com.baims.dailyforecast.presentation.gymslist.GymsViewModel
-import com.baims.dailyforecast.presentation.gymslist.PreviewDropDown
 import com.baims.dailyforecast.ui.theme.BaimsDailyForecastTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,8 +41,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BaimsDailyForecastTheme {
-                val vm: CitiesViewModel = hiltViewModel()
-                CityDropdown(vm)
+                GymsAroundApp()
             }
         }
     }
@@ -39,13 +52,14 @@ private fun GymsAroundApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "gyms") {
         composable(route = "gyms") {
-            val vm: GymsViewModel = hiltViewModel()
+            val gymsViewModel: GymsViewModel = hiltViewModel()
+            val citiesViewModel: CitiesViewModel = hiltViewModel()
             Column {
-                PreviewDropDown()
-                GymsScreen(vm.state.value, { id ->
+                CityDropdown(citiesViewModel)
+                GymsScreen(gymsViewModel.state.value, { id ->
                     navController.navigate("gyms/$id")
                 }, onFavouriteIconClick = { id: Int, oldValue: Boolean ->
-                    vm.toggleFavState(id, oldValue)
+                    gymsViewModel.toggleFavState(id, oldValue)
                 })
             }
 
@@ -66,77 +80,3 @@ private fun GymsAroundApp() {
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun myBoxLayout() {
-    Box(
-        modifier = Modifier
-            .size(120.dp)
-            .background(Color.Black)
-            .padding(10.dp)
-            .clip(RoundedCornerShape(size = 10.dp))
-            .background(Color.LightGray)
-    ){
-        Text(text = " Hello ", Modifier.align(Alignment.TopStart))
-        Text(text = " Android", Modifier.align(Alignment.Center))
-        Text(text = " Cooki", Modifier.align(Alignment.BottomEnd))
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyText() {
-    Text(
-        text = " s",
-        style = TextStyle(
-            color = Color.Red,
-            fontSize = 24.sp,
-            fontStyle = FontStyle.Italic,
-            fontFamily = FontFamily.SansSerif,
-            textAlign = TextAlign.Center
-        ), maxLines = 2
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyButton() {
-    var buttonIsEnabled by remember { mutableStateOf(true) }
-
-    Button(
-        onClick = { buttonIsEnabled = !buttonIsEnabled },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Black,
-            contentColor = Color.White,
-            disabledContainerColor = Color.LightGray,
-        ),
-        enabled = buttonIsEnabled
-    ) {
-
-        Text(text = if (buttonIsEnabled) "Click Me" else "I'm Disabled")
-    }
-}
-
-@Preview(name = "TextField",showBackground = true)
-@Composable
-fun MyTextField() {
-    var emailAddress by remember { mutableStateOf("") }
-
-    TextField(value = emailAddress, onValueChange = {
-        emailAddress = it
-    },
-        label = {
-            Text(text = "Email Address")
-        })
-}
-
-@Preview(name = "Image",showBackground = true)
-@Composable
-fun MyImage() {
-    Image(
-        painter = painterResource(id = R.drawable.ic_launcher_background),
-        contentDescription = "Image"
-    )
-}*/
