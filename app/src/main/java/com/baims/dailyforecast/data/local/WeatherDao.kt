@@ -15,8 +15,8 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAll(localWeatherData: List<LocalWeatherData>)
 
-    @Query("SELECT * FROM weather WHERE city_id = 1")
-    suspend fun getWeatherByCity(): List<LocalWeatherData>
+    @Query("SELECT * FROM weather WHERE city_id = :cityId")
+    suspend fun getWeatherByCity(cityId: Int): List<LocalWeatherData>
 
     @Update(entity = LocalWeatherData::class)
     suspend fun updateAll(localGymFavouriteStates: List<LocalWeatherCityState>)

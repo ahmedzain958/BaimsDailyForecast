@@ -3,6 +3,7 @@ package com.baims.dailyforecast.data.di
 import android.content.Context
 import androidx.room.Room
 import com.baims.dailyforecast.data.ForecastRepositoryImpl
+import com.baims.dailyforecast.data.local.WeatherDao
 import com.baims.dailyforecast.data.local.WeatherDatabase
 import com.baims.dailyforecast.data.remote.ForecastApiService
 import com.baims.dailyforecast.domain.ForecastRepository
@@ -53,8 +54,9 @@ object ForecastDataModule {
     fun provideForecastRepository(
         @ApplicationContext context: Context,
         apiService: ForecastApiService,
+        weatherDao: WeatherDao,
         @IODispatcher dispatcher: CoroutineDispatcher,
     ): ForecastRepository =
-        ForecastRepositoryImpl(context, apiService, dispatcher)
+        ForecastRepositoryImpl(context, apiService,weatherDao, dispatcher)
 
 }

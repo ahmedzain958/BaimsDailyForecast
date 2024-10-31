@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -49,10 +50,15 @@ fun ForecastScreen(
         }
 
         else -> {
-            LazyColumn {
+            LazyColumn (horizontalAlignment = Alignment.Start){
                 items(state.weatherDataList) { weatherDataEntity: WeatherDataEntity ->
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = weatherDataEntity.temperature.toString())
+                    Text(
+                        text = weatherDataEntity.temperature.toString(),
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .padding(horizontal = 16.dp) // Optional: Add padding for spacing
+                    )
                 }
             }
         }

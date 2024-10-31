@@ -2,7 +2,10 @@ package com.baims.dailyforecast.data
 
 import android.content.Context
 import com.baims.dailyforecast.data.di.IODispatcher
+import com.baims.dailyforecast.data.local.LocalWeatherCityState
+import com.baims.dailyforecast.data.local.WeatherDao
 import com.baims.dailyforecast.data.local.model.LocalCity
+import com.baims.dailyforecast.data.local.model.forecast.LocalWeatherData
 import com.baims.dailyforecast.data.remote.ForecastApiService
 import com.baims.dailyforecast.data.remote.model.WeatherResponse
 import com.baims.dailyforecast.domain.ForecastRepository
@@ -21,8 +24,42 @@ import javax.inject.Singleton
 class ForecastRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     @Named("CitiesRetrofit") private val apiService: ForecastApiService,
+    private val weatherDao: WeatherDao,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
 ) : ForecastRepository {
+
+    private suspend fun updateLocalDatabase(lat: Double, lon: Double) {
+        val weatherResponse: WeatherResponse = apiService.getForecast(lat, lon)
+        weatherDao.addAll(weatherResponse.list.orEmpty().map {
+            LocalWeatherData(
+                weatherResponse.city?.id ?: 0,
+                weatherResponse.city?.name ?: "",
+                lat, lon,
+                temperature = it?.main?.temp ?: 0.0,
+                humidity = it?.main?.humidity ?: 0,
+                description = it?.weather?.firstOrNull()?.description.orEmpty(),
+                dateTime = it?.dtTxt.orEmpty()
+            )
+        })
+        weatherResponse.city?.id?.let {
+            val cityWeatherList: List<LocalWeatherData> = weatherDao.getWeatherByCity(it)
+            weatherDao.updateAll(cityWeatherList.map { weatherItem ->
+                LocalWeatherCityState(weatherItem.id, "")
+            })
+        }
+
+    }
+
+    override suspend fun loadForecastList(lat: Double, lon: Double) = withContext(dispatcher) {
+        try {
+            updateLocalDatabase(lat, lon)
+        } catch (e: Exception) {
+            if (weatherDao.getAll().isEmpty())
+                throw Exception("Something went wrong. try connecting to internet")
+        }
+        weatherDao.getAll()
+    }
+
     override suspend fun getForecastList(
         lat: Double,
         lon: Double,
