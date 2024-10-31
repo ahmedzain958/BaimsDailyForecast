@@ -6,7 +6,7 @@ import com.baims.dailyforecast.data.ForecastRepositoryImpl
 import com.baims.dailyforecast.data.GymsRepositoryImpl
 import com.baims.dailyforecast.data.local.GymsDao
 import com.baims.dailyforecast.data.local.GymsDatabase
-import com.baims.dailyforecast.data.remote.GymsApiService
+import com.baims.dailyforecast.data.remote.ForecastApiService
 import com.baims.dailyforecast.domain.ForecastRepository
 import com.baims.dailyforecast.domain.GymsRepository
 import dagger.Module
@@ -22,7 +22,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object GymsDataModule {
+object ForecastDataModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
@@ -37,7 +37,7 @@ object GymsDataModule {
     fun provideCitiesRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://dev-orcas.s3.eu-west-1.amazonaws.com/uploads/")
+            .baseUrl("https://api.openweathermap.org/")
             .build()
     }
 
@@ -56,12 +56,12 @@ object GymsDataModule {
     fun provideDao(gymsDatabase: GymsDatabase) = gymsDatabase.dao
 
     @Provides
-    fun provideApiService(retrofit: Retrofit): GymsApiService =
-        retrofit.create(GymsApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): ForecastApiService =
+        retrofit.create(ForecastApiService::class.java)
 
     @Provides
     fun provideGymsRepository(
-        apiService: GymsApiService,
+        apiService: ForecastApiService,
         gymDao: GymsDao,
         @IODispatcher dispatcher: CoroutineDispatcher,
     ): GymsRepository =
@@ -69,8 +69,8 @@ object GymsDataModule {
 
   @Provides
     fun provideForecastRepository(@ApplicationContext   context: Context,
-        apiService: GymsApiService,
-        @IODispatcher dispatcher: CoroutineDispatcher,
+                                  apiService: ForecastApiService,
+                                  @IODispatcher dispatcher: CoroutineDispatcher,
     ): ForecastRepository =
       ForecastRepositoryImpl(context, apiService, dispatcher)
 

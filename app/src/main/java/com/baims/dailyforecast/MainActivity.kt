@@ -3,33 +3,14 @@ package com.baims.dailyforecast
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import androidx.navigation.navDeepLink
-import com.baims.dailyforecast.presentation.citieslist.CitiesViewModel
+import com.baims.dailyforecast.presentation.citieslist.ForecastViewModel
 import com.baims.dailyforecast.presentation.citieslist.CityDropdown
-import com.baims.dailyforecast.presentation.details.GymDetailsScreen
 import com.baims.dailyforecast.presentation.gymslist.GymsScreen
 import com.baims.dailyforecast.presentation.gymslist.GymsViewModel
 import com.baims.dailyforecast.ui.theme.BaimsDailyForecastTheme
@@ -41,21 +22,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BaimsDailyForecastTheme {
-                GymsAroundApp()
+                ForecastAroundApp()
             }
         }
     }
 }
 
 @Composable
-private fun GymsAroundApp() {
+private fun ForecastAroundApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "gyms") {
         composable(route = "gyms") {
             val gymsViewModel: GymsViewModel = hiltViewModel()
-            val citiesViewModel: CitiesViewModel = hiltViewModel()
+            val forecastViewModel: ForecastViewModel = hiltViewModel()
             Column {
-                CityDropdown(citiesViewModel)
+                CityDropdown(forecastViewModel, {})
                 GymsScreen(gymsViewModel.state.value, { id ->
                     navController.navigate("gyms/$id")
                 }, onFavouriteIconClick = { id: Int, oldValue: Boolean ->
@@ -65,7 +46,7 @@ private fun GymsAroundApp() {
 
         }
 
-        composable(
+       /* composable(
             route = "gyms/{gym_id}", arguments = listOf(
                 navArgument("gym_id") {
                     type = NavType.IntType
@@ -77,6 +58,6 @@ private fun GymsAroundApp() {
             )
         ) { it: androidx.navigation.NavBackStackEntry ->
             GymDetailsScreen()
-        }
+        }*/
     }
 }

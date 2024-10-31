@@ -1,14 +1,10 @@
 package com.baims.dailyforecast.presentation.citieslist
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baims.dailyforecast.data.di.IODispatcher
 import com.baims.dailyforecast.domain.usecases.GetCitiesUseCase
+import com.baims.dailyforecast.domain.usecases.GetForecastListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -20,11 +16,13 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class CitiesViewModel @Inject constructor(
+class ForecastViewModel @Inject constructor(
     private val getCitiesUseCase: GetCitiesUseCase,
+    private val getForecastListUseCase: GetForecastListUseCase,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(CitiesScreenState(emptyList(), true)) // Use MutableStateFlow
+    private val _state =
+        MutableStateFlow(CitiesScreenState(emptyList(), true)) // Use MutableStateFlow
     val state: StateFlow<CitiesScreenState> = _state.asStateFlow()
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->

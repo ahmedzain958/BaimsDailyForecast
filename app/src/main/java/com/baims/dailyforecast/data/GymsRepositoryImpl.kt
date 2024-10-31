@@ -4,7 +4,7 @@ import com.baims.dailyforecast.data.di.IODispatcher
 import com.baims.dailyforecast.data.local.GymsDao
 import com.baims.dailyforecast.data.local.model.LocalGym
 import com.baims.dailyforecast.data.local.model.LocalGymFavouriteState
-import com.baims.dailyforecast.data.remote.GymsApiService
+import com.baims.dailyforecast.data.remote.ForecastApiService
 import com.baims.dailyforecast.domain.model.Gym
 import com.baims.dailyforecast.domain.GymsRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Singleton
 class GymsRepositoryImpl @Inject constructor(
-    private val apiService: GymsApiService,
+    private val apiService: ForecastApiService,
     private val gymDao: GymsDao,
     @IODispatcher private val dispatcher: CoroutineDispatcher
 ): GymsRepository {
