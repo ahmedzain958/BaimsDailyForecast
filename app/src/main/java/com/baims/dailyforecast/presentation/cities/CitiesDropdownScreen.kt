@@ -1,4 +1,4 @@
-package com.baims.dailyforecast.presentation.citieslist
+package com.baims.dailyforecast.presentation.cities
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.baims.dailyforecast.R
 import com.baims.dailyforecast.domain.model.City
+import com.baims.dailyforecast.presentation.ForecastViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,5 +1,5 @@
 package com.baims.dailyforecast.presentation
 
 object SemanticDescription {
-    const val GYMS_LIST_LOADING = "Gyms List Loading"
+    const val Forecast_LIST_LOADING = "Forecast List Loading"
 }

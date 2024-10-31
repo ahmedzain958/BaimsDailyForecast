@@ -1,10 +1,11 @@
-package com.baims.dailyforecast.presentation.citieslist
+package com.baims.dailyforecast.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baims.dailyforecast.data.di.IODispatcher
 import com.baims.dailyforecast.domain.usecases.GetCitiesUseCase
 import com.baims.dailyforecast.domain.usecases.GetForecastListUseCase
+import com.baims.dailyforecast.presentation.cities.CitiesScreenState
 import com.baims.dailyforecast.presentation.forecast.ForecastScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

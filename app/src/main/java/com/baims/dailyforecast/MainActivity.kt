@@ -10,8 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.baims.dailyforecast.presentation.citieslist.CitiesDropdownScreen
-import com.baims.dailyforecast.presentation.citieslist.ForecastViewModel
+import com.baims.dailyforecast.presentation.cities.CitiesDropdownScreen
+import com.baims.dailyforecast.presentation.ForecastViewModel
 import com.baims.dailyforecast.presentation.forecast.ForecastScreen
 import com.baims.dailyforecast.ui.theme.BaimsDailyForecastTheme
 import dagger.hilt.android.AndroidEntryPoint

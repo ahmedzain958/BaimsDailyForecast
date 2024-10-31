@@ -1,4 +1,4 @@
-package com.baims.dailyforecast.presentation.citieslist
+package com.baims.dailyforecast.presentation.cities
 
 import com.baims.dailyforecast.domain.model.City
 
