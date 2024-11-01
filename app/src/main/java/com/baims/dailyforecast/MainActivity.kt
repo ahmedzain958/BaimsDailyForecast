@@ -56,6 +56,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.baims.dailyforecast.domain.model.City
 import com.baims.dailyforecast.domain.model.WeatherEntity
 import com.baims.dailyforecast.presentation.ForecastViewModel
+import com.baims.dailyforecast.presentation.cities.CitiesScreenState
 import com.baims.dailyforecast.presentation.forecast.ForecastScreenState
 import com.baims.dailyforecast.ui.theme.BaimsDailyForecastTheme
 import com.baims.dailyforecast.ui.theme.BlueJC
@@ -69,25 +70,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BaimsDailyForecastTheme {
-                ForecastAroundApp()
+                val viewModel: ForecastViewModel = hiltViewModel()
+                CitiesDropdownScreen(
+                    viewModel.citiesState.collectAsState().value,
+                    viewModel.weatherDataListState.collectAsState().value
+                ) { city: City ->
+                    viewModel.getWeatherDataList(
+                        city.id ?: 0,
+                        city.cityNameEn ?: "",
+                        city.lat ?: 0.0,
+                        city.lon ?: 0.0
+                    )
+                }
             }
         }
-    }
-}
-
-@Composable
-private fun ForecastAroundApp() {
-    CitiesDropdownScreen() {
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CitiesDropdownScreen(
-    viewModel: ForecastViewModel = hiltViewModel(),
+    citiesState: CitiesScreenState,
+    forecastScreenState: ForecastScreenState,
     onCheckWeatherClick: (City) -> Unit,
 ) {
-    val citiesState by viewModel.citiesState.collectAsState()
     var expanded by remember { mutableStateOf(false) }
     var selectedCity by remember { mutableStateOf<City?>(null) }
 
@@ -149,12 +155,6 @@ fun CitiesDropdownScreen(
             Button(
                 onClick = {
                     selectedCity?.let { city ->
-                        viewModel.getWeatherDataList(
-                            city.id ?: 0,
-                            city.cityNameEn ?: "",
-                            city.lat ?: 0.0,
-                            city.lon ?: 0.0
-                        )
                         onCheckWeatherClick.invoke(city)
                     }
                 },
@@ -171,17 +171,20 @@ fun CitiesDropdownScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-            val forecastScreenState: ForecastScreenState =
-                viewModel.weatherDataListState.collectAsState().value
-            if (!forecastScreenState.isLoading
-                && forecastScreenState.weatherDataList.isNotEmpty()
-            ) {
-                val weatherList = forecastScreenState.weatherDataList
-                LazyColumn {
-                    items(weatherList) {
-                        DailyItem(weatherEntity = it)
-                    }
-                }
+            WeatherList(forecastScreenState)
+        }
+    }
+}
+
+@Composable
+fun WeatherList(forecastScreenState: ForecastScreenState) {
+    if (!forecastScreenState.isLoading
+        && forecastScreenState.weatherDataList.isNotEmpty()
+    ) {
+        val weatherList = forecastScreenState.weatherDataList
+        LazyColumn {
+            items(weatherList) {
+                DailyItem(weatherEntity = it)
             }
         }
     }
