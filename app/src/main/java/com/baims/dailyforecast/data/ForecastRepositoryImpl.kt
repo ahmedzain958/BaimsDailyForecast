@@ -68,8 +68,8 @@ class ForecastRepositoryImpl @Inject constructor(
                 val weatherDaoList = weatherDao.getWeatherByCity(cityId)
                 mapToDomainModel(weatherDaoList)
             } catch (e: Exception) {
-                val exception = e.message
-                emptyList()
+                throw Exception("Something went wrong. try connecting to internet")
+            } finally {
             }
         }
     }
