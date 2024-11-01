@@ -1,7 +1,6 @@
 package com.baims.dailyforecast.domain.usecases
 
 import com.baims.dailyforecast.domain.ForecastRepository
-import com.baims.dailyforecast.domain.model.WeatherEntity
 import javax.inject.Inject
 
 class SaveForecastListUseCase @Inject constructor(

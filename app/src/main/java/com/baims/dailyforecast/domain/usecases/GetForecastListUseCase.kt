@@ -6,9 +6,14 @@ import javax.inject.Inject
 
 class GetForecastListUseCase @Inject constructor(
     private val repository: ForecastRepository,
-    private val saveForecastListUseCase: SaveForecastListUseCase
+    private val saveForecastListUseCase: SaveForecastListUseCase,
 ) {
-    suspend operator fun invoke(cityId: Int, cityName: String, lat: Double, lon: Double): List<WeatherEntity> {
+    suspend operator fun invoke(
+        cityId: Int,
+        cityName: String,
+        lat: Double,
+        lon: Double,
+    ): List<WeatherEntity> {
         saveForecastListUseCase.invoke(cityId, cityName, lat, lon)
         return repository.getForecastList(cityId, lat, lon)
     }

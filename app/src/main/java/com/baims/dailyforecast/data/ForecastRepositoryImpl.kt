@@ -40,12 +40,15 @@ class ForecastRepositoryImpl @Inject constructor(
                 temperature = it.main?.temp ?: 0.0,
                 humidity = it.main?.humidity ?: 0,
                 description = it.weather?.firstOrNull()?.description.orEmpty(),
-                dateTime = it.dtTxt.orEmpty())
+                dateTime = it.dtTxt.orEmpty()
+            )
         })
     }
 
-    override suspend fun saveForecastList(cityId: Int, cityName: String,
-                                          lat: Double, lon: Double) =
+    override suspend fun saveForecastList(
+        cityId: Int, cityName: String,
+        lat: Double, lon: Double,
+    ) =
         withContext(dispatcher) {
             try {
                 insertIntoLocalDatabase(cityId, cityName, lat, lon)
@@ -55,7 +58,8 @@ class ForecastRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun getForecastList(cityId: Int,
+    override suspend fun getForecastList(
+        cityId: Int,
         lat: Double,
         lon: Double,
     ): List<WeatherEntity> {
@@ -90,8 +94,9 @@ class ForecastRepositoryImpl @Inject constructor(
             WeatherEntity(
                 temperature = it.temperature,
                 humidity = it.humidity,
-                weather = emptyList(),
-                dateTime = it.dateTime
+                dateTime = it.dateTime ?: "",
+                description = it.description,
+                cityName = it.cityNameEn
             )
         }
     }

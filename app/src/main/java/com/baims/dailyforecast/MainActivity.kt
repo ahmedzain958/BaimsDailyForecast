@@ -79,28 +79,6 @@ class MainActivity : ComponentActivity() {
 private fun ForecastAroundApp() {
     CitiesDropdownScreen() {
     }
-    /*val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "cities") {
-        composable(route = "cities") {
-            CitiesDropdownScreen() { city ->
-                navController.navigate("forecast?lat=${city.lat}&lon=${city.lon}")
-            }
-        }
-        composable(
-            route = "forecast?lat={lat}&lon={lon}",
-            arguments = listOf(
-                navArgument("lat") { type = NavType.FloatType },
-                navArgument("lon") { type = NavType.FloatType }
-            )
-        ) { backStackEntry ->
-            val lat = backStackEntry.arguments?.getFloat("lat") ?: 0f
-            val lon = backStackEntry.arguments?.getFloat("lon") ?: 0f
-            val forecastViewModel: ForecastViewModel = hiltViewModel()
-            forecastViewModel.getWeatherDataList(lat.toDouble(), lon.toDouble())
-            val state = forecastViewModel.weatherDataListState.value
-            ForecastScreen(state = state)
-        }
-    }*/
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -195,10 +173,12 @@ fun CitiesDropdownScreen(
             }
             val forecastScreenState: ForecastScreenState =
                 viewModel.weatherDataListState.collectAsState().value
-            if (!forecastScreenState.isLoading && forecastScreenState.weatherDataList.isNotEmpty()) {
+            if (!forecastScreenState.isLoading
+                && forecastScreenState.weatherDataList.isNotEmpty()
+            ) {
                 val weatherList = forecastScreenState.weatherDataList
                 LazyColumn {
-                    items(weatherList){
+                    items(weatherList) {
                         DailyItem(weatherEntity = it)
                     }
                 }
@@ -270,7 +250,7 @@ private fun DailyItem(weatherEntity: WeatherEntity) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        WeatherCard(label = "city", value = "cityname", icon = Icons.Default.Place)
+        WeatherCard(label = "city", value = weatherEntity.cityName, icon = Icons.Default.Place)
         WeatherCard(
             label = "temperature",
             value = "${weatherEntity.temperature}°C",
@@ -289,7 +269,7 @@ private fun DailyItem(weatherEntity: WeatherEntity) {
         )
         WeatherCard(
             label = "description",
-            value = weatherEntity.dateTime ?: "",
+            value = weatherEntity.description,
             icon = Icons.Default.Info
         )
     }
