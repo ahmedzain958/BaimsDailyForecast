@@ -8,7 +8,7 @@
 * Retrofit
 * Jetpack Compose UI
 * Unit Test
-* Instrument Test
+* Instrumented Test
 -----------------------------------------------------------------------------------------------------------
  App Features
 * Cities Drop-Down getting from assets Json file
