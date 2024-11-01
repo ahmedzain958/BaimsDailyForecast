@@ -23,9 +23,9 @@ class ForecastViewModel @Inject constructor(
     private val getForecastListUseCase: GetForecastListUseCase,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    private val _state =
+    private val _citiesState =
         MutableStateFlow(CitiesScreenState(emptyList(), true)) // Use MutableStateFlow
-    val state: StateFlow<CitiesScreenState> = _state.asStateFlow()
+    val citiesState: StateFlow<CitiesScreenState> = _citiesState.asStateFlow()
 
     private val _weatherDataListState =
         MutableStateFlow(ForecastScreenState(emptyList(), false)) // Use MutableStateFlow
@@ -33,7 +33,7 @@ class ForecastViewModel @Inject constructor(
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
-        _state.value = _state.value.copy(error = throwable.message, isLoading = false)
+        _citiesState.value = _citiesState.value.copy(error = throwable.message, isLoading = false)
     }
 
     init {
@@ -42,21 +42,21 @@ class ForecastViewModel @Inject constructor(
 
     private fun loadCities() {
         viewModelScope.launch(coroutineExceptionHandler + dispatcher) {
-            _state.value = _state.value.copy(isLoading = true)
+            _citiesState.value = _citiesState.value.copy(isLoading = true)
             try {
                 val cities = getCitiesUseCase()
-                _state.value = _state.value.copy(citiesList = cities, isLoading = false)
+                _citiesState.value = _citiesState.value.copy(citiesList = cities, isLoading = false)
             } catch (e: Exception) {
-                _state.value = _state.value.copy(error = e.message, isLoading = false)
+                _citiesState.value = _citiesState.value.copy(error = e.message, isLoading = false)
             }
         }
     }
 
-    fun getWeatherDataList(lat: Double, lon: Double) {
+    fun getWeatherDataList(cityId: Int, cityName: String, lat: Double, lon: Double) {
         viewModelScope.launch(coroutineExceptionHandler + dispatcher) {
             _weatherDataListState.value = _weatherDataListState.value.copy(isLoading = true)
             try {
-                val weatherDataList = getForecastListUseCase(lat, lon)
+                val weatherDataList = getForecastListUseCase(cityId, cityName, lat, lon)
                 _weatherDataListState.value = _weatherDataListState.value.copy(
                     weatherDataList = weatherDataList,
                     isLoading = false

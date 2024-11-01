@@ -1,9 +1,9 @@
 package com.baims.dailyforecast.presentation.forecast
 
-import com.baims.dailyforecast.domain.model.WeatherDataEntity
+import com.baims.dailyforecast.domain.model.WeatherEntity
 
 data class ForecastScreenState(
-    var weatherDataList: List<WeatherDataEntity>,
+    var weatherDataList: List<WeatherEntity>,
     var isLoading: Boolean = false,
     var error: String? = null
 )

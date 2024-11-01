@@ -1,9 +1,10 @@
 package com.baims.dailyforecast.domain.model
 
-data class WeatherDataEntity(
+import com.baims.dailyforecast.data.remote.model.Weather
+
+data class WeatherEntity(
     val temperature: Double,
     val humidity: Int,
-    val description: String,
-    val iconUrl: String? = null,
+    val weather: List<Weather>,
     val dateTime: String? = null,
 )

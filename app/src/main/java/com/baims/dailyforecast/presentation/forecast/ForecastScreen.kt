@@ -34,7 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.baims.dailyforecast.R
 import com.baims.dailyforecast.domain.model.City
-import com.baims.dailyforecast.domain.model.WeatherDataEntity
+import com.baims.dailyforecast.domain.model.WeatherEntity
 
 @Composable
 fun ForecastScreen(
@@ -51,7 +51,7 @@ fun ForecastScreen(
 
         else -> {
             LazyColumn(horizontalAlignment = Alignment.Start) {
-                items(state.weatherDataList) { weatherDataEntity: WeatherDataEntity ->
+                items(state.weatherDataList) { weatherEntity: WeatherEntity ->
                     Spacer(modifier = Modifier.height(8.dp))
                     Box(
                         modifier = Modifier
@@ -60,7 +60,7 @@ fun ForecastScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = weatherDataEntity.temperature.toString(),
+                            text = weatherEntity.temperature.toString(),
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .padding(horizontal = 16.dp) // Optional: Add padding for spacing
@@ -122,7 +122,7 @@ fun ErrorContent(
 }
 
 @Composable
-fun WeatherItem(weatherData: WeatherDataEntity) {
+fun WeatherItem(weatherData: WeatherEntity) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -136,7 +136,7 @@ fun WeatherItem(weatherData: WeatherDataEntity) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = weatherData.description, style = MaterialTheme.typography.bodyLarge)
+                Text(text = weatherData.weather.toString(), style = MaterialTheme.typography.bodyLarge)
                 Text(
                     text = "Temp: ${weatherData.temperature}°C",
                     style = MaterialTheme.typography.bodyMedium
@@ -148,13 +148,6 @@ fun WeatherItem(weatherData: WeatherDataEntity) {
                 weatherData.dateTime?.let {
                     Text(text = it, style = MaterialTheme.typography.bodySmall)
                 }
-            }
-            weatherData.iconUrl?.let { iconUrl ->
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = "Weather Icon",
-                    modifier = Modifier.size(48.dp)
-                )
             }
         }
     }
