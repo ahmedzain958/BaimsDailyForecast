@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BaimsDailyForecast</string>
     <string name="select_a_city">Select a city</string>
+    <string name="check_weather">Check Weather</string>
 </resources>

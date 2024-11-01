@@ -50,15 +50,22 @@ fun ForecastScreen(
         }
 
         else -> {
-            LazyColumn (horizontalAlignment = Alignment.Start){
+            LazyColumn(horizontalAlignment = Alignment.Start) {
                 items(state.weatherDataList) { weatherDataEntity: WeatherDataEntity ->
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = weatherDataEntity.temperature.toString(),
+                    Box(
                         modifier = Modifier
-                            .wrapContentWidth()
-                            .padding(horizontal = 16.dp) // Optional: Add padding for spacing
-                    )
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = weatherDataEntity.temperature.toString(),
+                            modifier = Modifier
+                                .wrapContentWidth()
+                                .padding(horizontal = 16.dp) // Optional: Add padding for spacing
+                        )
+                    }
                 }
             }
         }
