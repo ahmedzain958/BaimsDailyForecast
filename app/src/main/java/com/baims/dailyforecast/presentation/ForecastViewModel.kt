@@ -63,7 +63,7 @@ class ForecastViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 _weatherDataListState.value =
-                    _weatherDataListState.value.copy(error = e.message, isLoading = false)
+                    _weatherDataListState.value.copy(error = "Couldn't fetch data", isLoading = false)
             }
         }
     }

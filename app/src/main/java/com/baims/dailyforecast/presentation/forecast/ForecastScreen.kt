@@ -42,7 +42,7 @@ fun ForecastScreen(
         }
 
         state.error != null -> {
-            Text(text = "error")
+            Text(text = "Couldn't fetch data")
         }
 
         else -> {

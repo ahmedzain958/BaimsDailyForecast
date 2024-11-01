@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -48,6 +49,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,6 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.baims.dailyforecast.domain.model.City
 import com.baims.dailyforecast.domain.model.WeatherEntity
 import com.baims.dailyforecast.presentation.ForecastViewModel
+import com.baims.dailyforecast.presentation.SemanticDescription
 import com.baims.dailyforecast.presentation.cities.CitiesScreenState
 import com.baims.dailyforecast.presentation.forecast.ForecastScreenState
 import com.baims.dailyforecast.ui.theme.BaimsDailyForecastTheme
@@ -172,6 +176,37 @@ fun CitiesDropdownScreen(
                 )
             }
             WeatherList(forecastScreenState)
+        }
+        if (forecastScreenState.isLoading) CircularProgressIndicator(Modifier.semantics {
+            this.contentDescription = SemanticDescription.Forecast_LIST_LOADING
+        })
+        forecastScreenState.error?.let {
+            val viewModel: ForecastViewModel = hiltViewModel()
+            Column {
+                Text(it)
+                Button(
+                    onClick = {
+                        viewModel.getWeatherDataList(
+                            selectedCity?.id ?: 0,
+                            selectedCity.toString(),
+                            selectedCity?.lat ?: 0.0,
+                            selectedCity?.lon ?: 0.0
+                        )
+                    },
+                    colors = ButtonDefaults.buttonColors(Pink80),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 8.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.retry),
+                        color = Color.White,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
         }
     }
 }
