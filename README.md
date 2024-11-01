@@ -6,7 +6,7 @@
 * Hilt Dependency Injection
 * Room
 * Retrofit
-* Jetpack Compose UI
+* Jetpack Compose UI && State Hoisting
 * Unit Test
 * Instrumented Test
 -----------------------------------------------------------------------------------------------------------
