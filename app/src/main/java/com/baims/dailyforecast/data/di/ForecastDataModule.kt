@@ -26,7 +26,7 @@ object ForecastDataModule {
     fun provideCitiesRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .baseUrl(Constants.BASE_URL)
             .build()
     }
 
@@ -37,7 +37,7 @@ object ForecastDataModule {
         return Room.databaseBuilder(
             context.applicationContext,
             WeatherDatabase::class.java,
-            "weather_database"
+            Constants.WEATHER_DATABASE
         ).fallbackToDestructiveMigration()
             .build()
     }
@@ -57,6 +57,11 @@ object ForecastDataModule {
         weatherDao: WeatherDao,
         @IODispatcher dispatcher: CoroutineDispatcher,
     ): ForecastRepository =
-        ForecastRepositoryImpl(context, apiService,weatherDao, dispatcher)
+        ForecastRepositoryImpl(context, apiService, weatherDao, dispatcher)
 
+}
+
+object Constants {
+    const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+    const val WEATHER_DATABASE = "weather_database"
 }

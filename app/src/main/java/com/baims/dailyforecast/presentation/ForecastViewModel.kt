@@ -54,7 +54,7 @@ class ForecastViewModel @Inject constructor(
 
     fun getWeatherDataList(cityId: Int, cityName: String, lat: Double, lon: Double) {
         viewModelScope.launch(coroutineExceptionHandler + dispatcher) {
-            _weatherDataListState.value = _weatherDataListState.value.copy(isLoading = true)
+            _weatherDataListState.value = _weatherDataListState.value.copy(isLoading = true, error = null)
             try {
                 val weatherDataList = getForecastListUseCase(cityId, cityName, lat, lon)
                 _weatherDataListState.value = _weatherDataListState.value.copy(
