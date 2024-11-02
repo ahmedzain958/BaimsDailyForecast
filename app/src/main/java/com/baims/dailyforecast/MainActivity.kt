@@ -90,7 +90,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CitiesDropdownScreen(
@@ -175,38 +174,39 @@ fun CitiesDropdownScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-            WeatherList(forecastScreenState)
-        }
-        if (forecastScreenState.isLoading) CircularProgressIndicator(Modifier.semantics {
-            this.contentDescription = SemanticDescription.Forecast_LIST_LOADING
-        })
-        forecastScreenState.error?.let {
-            val viewModel: ForecastViewModel = hiltViewModel()
-            Column {
-                Text(it)
-                Button(
-                    onClick = {
-                        viewModel.getWeatherDataList(
-                            selectedCity?.id ?: 0,
-                            selectedCity.toString(),
-                            selectedCity?.lat ?: 0.0,
-                            selectedCity?.lon ?: 0.0
+
+            if (forecastScreenState.isLoading) {
+                CircularProgressIndicator(Modifier.semantics {
+                    this.contentDescription = SemanticDescription.Forecast_LIST_LOADING
+                })
+            }
+
+            forecastScreenState.error?.let { errorMessage ->
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(errorMessage, color = Color.Red)
+                    Button(
+                        onClick = {
+                            selectedCity?.let { city ->
+                                onCheckWeatherClick.invoke(city)
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(Pink80),
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.retry),
+                            color = Color.White,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold
                         )
-                    },
-                    colors = ButtonDefaults.buttonColors(Pink80),
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 8.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.retry),
-                        color = Color.White,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    }
                 }
             }
 
+            // Display weather list if available and no errors
+            if (!forecastScreenState.isLoading && forecastScreenState.weatherDataList.isNotEmpty()) {
+                WeatherList(forecastScreenState)
+            }
         }
     }
 }
